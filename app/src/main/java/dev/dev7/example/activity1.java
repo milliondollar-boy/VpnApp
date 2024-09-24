@@ -32,6 +32,7 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
 public class activity1 extends AppCompatActivity
 {
+    private Button conn;
     private Button connection;
     private EditText v2ray_config;
     private SharedPreferences sharedPreferences;
