@@ -7,13 +7,18 @@
     android:gravity="center"
     android:orientation="vertical">
 
+
     <ImageButton
         android:id="@+id/btn_connect_image"
-        android:layout_width="431dp"
-        android:layout_height="468dp"
+        android:layout_width="429dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="283dp"
         android:contentDescription="TODO"
         android:scaleType="center"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,6 +43,77 @@
         android:text="TG"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/connection_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginBottom="302dp"
+        android:text="connection mode : VPN_TUN"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/server_delay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="13dp"
+        android:text="server delay : tap to test"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connection_mode" />
+
+    <TextView
+        android:id="@+id/connected_server_delay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="15dp"
+        android:text="connected server delay : wait for connection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/server_delay" />
+
+    <TextView
+        android:id="@+id/connection_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="20dp"
+        android:text="connection time : 00:00:00"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connected_server_delay" />
+
+    <TextView
+        android:id="@+id/connection_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="18dp"
+        android:text="connection speed : 0 B/s | 0 B/s"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connection_duration" />
+
+    <TextView
+        android:id="@+id/connection_traffic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="21dp"
+        android:text="connection traffic : 0 B | 0 B"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/connection_speed" />
+
+    <Button
+        android:id="@+id/button15"
+        android:layout_width="257dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="97dp"
+        android:layout_marginBottom="42dp"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_connect_image" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
