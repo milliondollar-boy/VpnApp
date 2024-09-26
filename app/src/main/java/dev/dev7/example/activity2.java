@@ -55,8 +55,7 @@ public class activity2 extends AppCompatActivity {
         String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.navigation_view_id);
+
 
 
         super.onCreate(savedInstanceState);
@@ -64,6 +63,8 @@ public class activity2 extends AppCompatActivity {
 
         if (savedInstanceState == null)
         {
+            ddd = findViewById(R.id.open_drawer_button);
+            drawerLayout = findViewById(R.id.drawer_layout);
             connect = findViewById(R.id.imageButton4);
             reset = findViewById(R.id.button6);
             tg = findViewById(R.id.button7);
@@ -79,8 +80,10 @@ public class activity2 extends AppCompatActivity {
         }
 
 
-
-
+        ddd.setOnClickListener(view -> {
+            // Открываем Navigation Drawer
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
 
 
         reset.setOnClickListener(view -> {
