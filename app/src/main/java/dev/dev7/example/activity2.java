@@ -40,7 +40,7 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 public class activity2 extends AppCompatActivity {
 
     private ImageButton connect;
-    private Button ddd, reset, tg, connection;
+    private Button openMenu, reset, tg, connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
     private DrawerLayout drawerLayout;
@@ -63,7 +63,7 @@ public class activity2 extends AppCompatActivity {
 
         if (savedInstanceState == null)
         {
-            ddd = findViewById(R.id.open_drawer_button);
+            openMenu = findViewById(R.id.open_drawer_button);
             drawerLayout = findViewById(R.id.drawer_layout);
             connect = findViewById(R.id.imageButton4);
             reset = findViewById(R.id.button6);
@@ -80,7 +80,7 @@ public class activity2 extends AppCompatActivity {
         }
 
 
-        ddd.setOnClickListener(view -> {
+        openMenu.setOnClickListener(view -> {
             // Открываем Navigation Drawer
             drawerLayout.openDrawer(GravityCompat.START);
         });
