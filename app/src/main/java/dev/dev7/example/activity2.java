@@ -7,7 +7,6 @@ import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_DURATION_BROADCAST
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_UPLOAD_SPEED_BROADCAST_EXTRA;
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_UPLOAD_TRAFFIC_BROADCAST_EXTRA;
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_STATICS_BROADCAST_INTENT;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -17,13 +16,20 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
 
@@ -34,27 +40,31 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 public class activity2 extends AppCompatActivity {
 
     private ImageButton connect;
-    private Button reset, tg, connection;
+    private Button ddd, reset, tg, connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        SharedPreferences sharedPreferences;
-        sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+        String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view_id);
 
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
 
-
         if (savedInstanceState == null)
         {
-            connect = findViewById(R.id.btn_connect_image);
+            connect = findViewById(R.id.imageButton4);
             reset = findViewById(R.id.button6);
             tg = findViewById(R.id.button7);
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
@@ -68,27 +78,35 @@ public class activity2 extends AppCompatActivity {
             connection = findViewById(R.id.button15);
         }
 
-        reset.setOnClickListener(v -> resetTheConfiguration());
 
-        tg.setOnClickListener(v -> openTelegramBot());
-        String v2ray_config = sharedPreferences.getString("v2ray_config", "");
-        connect.setOnClickListener(view ->
-        {
-            // Чтение сохранённой конфигурации
 
-            if (V2rayController.getConnectionState() == V2rayConstants.CONNECTION_STATES.DISCONNECTED) {
-                V2rayController.startV2ray(this, "Test Server", v2ray_config, null);
-                connect.setImageResource(R.drawable.new_photo);
-            } else {
+
+
+
+        reset.setOnClickListener(view -> {
+            if (!v2ray_config.isEmpty()) {
+                sharedPreferences.edit().remove("v2ray_config").apply();
                 V2rayController.stopV2ray(this);
-                connect.setImageResource(R.drawable.photo);
+                resetTheConfiguration();
             }
         });
+
+        tg.setOnClickListener(v -> openTelegramBot());
+
+        connect.setOnClickListener(view -> {
+            if (V2rayController.getConnectionState() == V2rayConstants.CONNECTION_STATES.DISCONNECTED) {
+                V2rayController.startV2ray(this, "Test Server", v2ray_config, null);
+            } else {
+                V2rayController.stopV2ray(this);
+            }
+        });
+
         connected_server_delay.setOnClickListener(view -> {
             connected_server_delay.setText("connected server delay : measuring...");
             // Don`t forget to do ui jobs in ui thread!
             V2rayController.getConnectedV2rayServerDelay(this, delayResult -> runOnUiThread(() -> connected_server_delay.setText("connected server delay : " + delayResult + "ms")));
         });
+
         // Another way to check the connection delay of a config without connecting to it.
         server_delay.setOnClickListener(view -> {
             server_delay.setText("server delay : measuring...");
@@ -99,7 +117,6 @@ public class activity2 extends AppCompatActivity {
             V2rayController.toggleConnectionMode();
             connection_mode.setText("connection mode : " + V2rayConfigs.serviceMode.toString());
         });
-
 
         v2rayBroadCastReceiver = new BroadcastReceiver() {
             @SuppressLint("SetTextI18n")
@@ -112,10 +129,12 @@ public class activity2 extends AppCompatActivity {
                     connection_mode.setText("connection mode : " + V2rayConfigs.serviceMode.toString());
                     switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(intent.getExtras().getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
                         case CONNECTED:
-                            connection.setText("CONNECTED");
+                            connect.setImageResource(R.drawable.disconnection);
+                            connection.setText("Подключено");
                             break;
                         case DISCONNECTED:
-                            connection.setText("DISCONNECTED");
+                            connect.setImageResource(R.drawable.connection);
+                            connection.setText("Отключено");
                             connected_server_delay.setText("connected server delay : wait for connection");
                             break;
                         case CONNECTING:
@@ -127,6 +146,7 @@ public class activity2 extends AppCompatActivity {
                 });
             }
         };
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             registerReceiver(v2rayBroadCastReceiver, new IntentFilter(V2RAY_SERVICE_STATICS_BROADCAST_INTENT), RECEIVER_EXPORTED);
         } else {
@@ -144,10 +164,11 @@ public class activity2 extends AppCompatActivity {
     }
 
     public void resetTheConfiguration(){
-        // v2ray_config.getDefaultConfig();
         Intent intent = new Intent(activity2.this, activity1.class);
         startActivity(intent);
+        finish();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
