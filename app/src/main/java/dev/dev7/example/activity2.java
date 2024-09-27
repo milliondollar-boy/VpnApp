@@ -21,14 +21,17 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
@@ -39,8 +42,9 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
 public class activity2 extends AppCompatActivity {
 
+    private ActionBarDrawerToggle toggle;
     private ImageButton connect;
-    private Button openMenu, reset, tg, connection;
+    private Button ddd, openMenu, reset, tg, connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
     private DrawerLayout drawerLayout;
@@ -54,15 +58,13 @@ public class activity2 extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
         String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
-
-
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
 
         if (savedInstanceState == null)
         {
+            //ddd = findViewById(R.id.button);
+            //navigationView = findViewById(R.id.navigation_view_id);
             openMenu = findViewById(R.id.open_drawer_button);
             drawerLayout = findViewById(R.id.drawer_layout);
             connect = findViewById(R.id.imageButton4);
@@ -79,6 +81,31 @@ public class activity2 extends AppCompatActivity {
             connection = findViewById(R.id.button15);
         }
 
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                                                             @Override
+                                                             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                                                                 int id = item.getItemId();
+
+                                                                 switch (id) {
+
+                                                                     case R.id.nav_reset:
+                                                                         Intent intent= new Intent(activity2.this, activity1.class);
+                                                                         startActivity(intent);
+                                                                         break;
+
+                                                                     case R.id.nav_tg:
+                                                                         openTelegramBot();
+
+                                                                     default:
+                                                                         return false;
+
+                                                                 }
+                                                                 return false;
+                                                             }
+                                                         });
 
         openMenu.setOnClickListener(view -> {
             // Открываем Navigation Drawer

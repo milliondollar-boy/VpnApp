@@ -124,11 +124,10 @@
 
     <!-- Navigation View для бокового меню -->
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigation_view_id"
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:menu="@menu/navigation_menu"
-        app:headerLayout="@layout/header_layout" />
+        app:menu="@menu/navigation_menu"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>
