@@ -21,17 +21,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Objects;
@@ -40,15 +39,16 @@ import dev.dev7.lib.v2ray.V2rayController;
 import dev.dev7.lib.v2ray.utils.V2rayConfigs;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
-public class activity2 extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private ActionBarDrawerToggle toggle;
+    private ActionBarDrawerToggle myToggle;
     private ImageButton connect;
-    private Button ddd, openMenu, reset, tg, connection;
+    private Button reset, tg, connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private Toolbar myToolBar;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("SetTextI18n")
@@ -59,13 +59,16 @@ public class activity2 extends AppCompatActivity {
         String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_2);
+        setContentView(R.layout.main_activity);
 
         if (savedInstanceState == null)
         {
-            //ddd = findViewById(R.id.button);
-            //navigationView = findViewById(R.id.navigation_view_id);
-            openMenu = findViewById(R.id.open_drawer_button);
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+            //navigationView.setCheckedItem(R.id.nav_home);
+
+            drawerLayout = findViewById(R.id.drawer_layout);
+            myToolBar = findViewById(R.id.my_toolbar);
+            navigationView = findViewById(R.id.nav_view);
             drawerLayout = findViewById(R.id.drawer_layout);
             connect = findViewById(R.id.imageButton4);
             reset = findViewById(R.id.button6);
@@ -81,36 +84,16 @@ public class activity2 extends AppCompatActivity {
             connection = findViewById(R.id.button15);
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
 
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                                                             @Override
-                                                             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                                                                 int id = item.getItemId();
 
-                                                                 switch (id) {
+        setSupportActionBar(myToolBar);
+        navigationView.setNavigationItemSelectedListener(this);
 
-                                                                     case R.id.nav_reset:
-                                                                         Intent intent= new Intent(activity2.this, activity1.class);
-                                                                         startActivity(intent);
-                                                                         break;
+        myToggle = new ActionBarDrawerToggle(this, drawerLayout, myToolBar, R.string.drawer_open, R.string.drawer_close);
 
-                                                                     case R.id.nav_tg:
-                                                                         openTelegramBot();
+        drawerLayout.addDrawerListener(myToggle);
 
-                                                                     default:
-                                                                         return false;
-
-                                                                 }
-                                                                 return false;
-                                                             }
-                                                         });
-
-        openMenu.setOnClickListener(view -> {
-            // Открываем Navigation Drawer
-            drawerLayout.openDrawer(GravityCompat.START);
-        });
+        myToggle.syncState();
 
 
         reset.setOnClickListener(view -> {
@@ -194,7 +177,7 @@ public class activity2 extends AppCompatActivity {
     }
 
     public void resetTheConfiguration(){
-        Intent intent = new Intent(activity2.this, activity1.class);
+        Intent intent = new Intent(MainActivity.this, activity1.class);
         startActivity(intent);
         finish();
     }
@@ -204,6 +187,35 @@ public class activity2 extends AppCompatActivity {
         super.onDestroy();
         if (v2rayBroadCastReceiver != null){
             unregisterReceiver(v2rayBroadCastReceiver);
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        switch (item.getItemId()){
+            case R.id.nav_reset:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ResetConfiguration()).commit();
+                break;
+            case R.id.nav_tg:
+                openTelegramBot();
+                break;
+            case R.id.nav_home:
+                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
         }
     }
 }

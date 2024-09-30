@@ -10,8 +10,10 @@
             android:title="reset"/>
         <item
             android:id="@+id/nav_tg"
-            android:title="@string/telegrambot"/>
-
+            android:title="telegrambot"/>
+        <item
+            android:id="@+id/nav_home"
+            android:title="Home"/>
     </group>
 
 </menu>

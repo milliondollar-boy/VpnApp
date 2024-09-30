@@ -20,7 +20,7 @@ public class activity1 extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_1);
+        setContentView(R.layout.fragment_reset_configuration);
 
         if (savedInstanceState == null) {
             connection = findViewById(R.id.btn_connection);
@@ -58,7 +58,7 @@ public class activity1 extends AppCompatActivity
     }
 
     public void startSecondActivity(){
-        Intent intent = new Intent(activity1.this, activity2.class);
+        Intent intent = new Intent(activity1.this, MainActivity.class);
         startActivity(intent);
         finish();
     }
