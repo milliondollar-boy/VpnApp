@@ -16,7 +16,10 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
@@ -39,19 +42,16 @@ import dev.dev7.lib.v2ray.V2rayController;
 import dev.dev7.lib.v2ray.utils.V2rayConfigs;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity{
 
-    private ActionBarDrawerToggle myToggle;
     private ImageButton connect;
     private Button reset, tg, connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
-    private DrawerLayout drawerLayout;
-    private NavigationView navigationView;
-    private Toolbar myToolBar;
+    private ImageButton btnPopup;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -63,13 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (savedInstanceState == null)
         {
-            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-            //navigationView.setCheckedItem(R.id.nav_home);
-
-            drawerLayout = findViewById(R.id.drawer_layout);
-            myToolBar = findViewById(R.id.my_toolbar);
-            navigationView = findViewById(R.id.nav_view);
-            drawerLayout = findViewById(R.id.drawer_layout);
+            btnPopup = findViewById(R.id.setting_id);
             connect = findViewById(R.id.imageButton4);
             reset = findViewById(R.id.button6);
             tg = findViewById(R.id.button7);
@@ -85,15 +79,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
 
+        registerForContextMenu(btnPopup);
 
-        setSupportActionBar(myToolBar);
-        navigationView.setNavigationItemSelectedListener(this);
 
-        myToggle = new ActionBarDrawerToggle(this, drawerLayout, myToolBar, R.string.drawer_open, R.string.drawer_close);
 
-        drawerLayout.addDrawerListener(myToggle);
-
-        myToggle.syncState();
 
 
         reset.setOnClickListener(view -> {
@@ -169,6 +158,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+
+        MenuInflater menuInflater = new MenuInflater( this);
+        menuInflater.inflate(R.menu.menu_item, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.reser){
+            Intent intent = new Intent(MainActivity.this, activity1.class);
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     public void openTelegramBot(){
         String botUsername = "My First Bot"; // Замените на имя вашего бота
         Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -187,35 +199,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
         if (v2rayBroadCastReceiver != null){
             unregisterReceiver(v2rayBroadCastReceiver);
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-            case R.id.nav_reset:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ResetConfiguration()).commit();
-                break;
-            case R.id.nav_tg:
-                openTelegramBot();
-                break;
-            case R.id.nav_home:
-                //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-                break;
-        }
-        drawerLayout.closeDrawer(GravityCompat.START);
-
-        return true;
-    }
-
-    @Override
-    public void onBackPressed(){
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else {
-            super.onBackPressed();
         }
     }
 }
