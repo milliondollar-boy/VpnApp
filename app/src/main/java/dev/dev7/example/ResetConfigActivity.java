@@ -4,13 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
 
-public class activity1 extends AppCompatActivity
+public class ResetConfigActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener
 {
+    private ImageButton btnPopup1;
     private Button connection;
     private EditText v2ray_config;
     private SharedPreferences sharedPreferences;
@@ -20,12 +24,22 @@ public class activity1 extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_reset_configuration);
+        setContentView(R.layout.reset_activity);
 
         if (savedInstanceState == null) {
+            btnPopup1 = findViewById(R.id.imageButton);
             connection = findViewById(R.id.btn_connection);
             v2ray_config = findViewById(R.id.v2ray_config);
         }
+
+
+        btnPopup1.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(ResetConfigActivity.this, v);
+            popup.setOnMenuItemClickListener(ResetConfigActivity.this);
+            popup.inflate(R.menu.popup_menu);
+            popup.show();
+        });
+
 
         // initialize shared preferences for save or reload default config
         sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
@@ -37,13 +51,21 @@ public class activity1 extends AppCompatActivity
             String v2rayConfig = v2ray_config.getText().toString().trim(); // Получаем текст из EditText
             if (v2rayConfig.isEmpty()) { // Проверяем, пустое ли поле
                 // Можно показать сообщение об ошибке, если поле пустое
-                Toast.makeText(activity1.this, "Введите ссылку!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ResetConfigActivity.this, "Введите ссылку!", Toast.LENGTH_SHORT).show();
             } else {
                 // Сохраняем конфигурацию и открываем вторую активность
                 sharedPreferences.edit().putString("v2ray_config", v2rayConfig).apply();
                 startSecondActivity();
             }
         });
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.reset){
+
+        }
+        return true;
     }
 
     @Override
@@ -58,7 +80,7 @@ public class activity1 extends AppCompatActivity
     }
 
     public void startSecondActivity(){
-        Intent intent = new Intent(activity1.this, MainActivity.class);
+        Intent intent = new Intent(ResetConfigActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }

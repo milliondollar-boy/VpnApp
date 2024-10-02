@@ -16,39 +16,25 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.appcompat.widget.PopupMenu;
 import java.util.Objects;
-
 import dev.dev7.lib.v2ray.V2rayController;
 import dev.dev7.lib.v2ray.utils.V2rayConfigs;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
-public class MainActivity extends AppCompatActivity{
+public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    private ImageButton connect;
-    private Button reset, tg, connection;
+    private ImageButton connect, btnPopup2;
+    private Button connection;
     private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
-    private ImageButton btnPopup;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint({"SetTextI18n", "WrongViewCast"})
@@ -59,14 +45,13 @@ public class MainActivity extends AppCompatActivity{
         String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.home_activity);
 
         if (savedInstanceState == null)
         {
-            btnPopup = findViewById(R.id.setting_id);
+
+            btnPopup2 = findViewById(R.id.setting_id);
             connect = findViewById(R.id.imageButton4);
-            reset = findViewById(R.id.button6);
-            tg = findViewById(R.id.button7);
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             connection_speed = findViewById(R.id.connection_speed);
@@ -78,22 +63,13 @@ public class MainActivity extends AppCompatActivity{
             connection = findViewById(R.id.button15);
         }
 
-
-        registerForContextMenu(btnPopup);
-
-
-
-
-
-        reset.setOnClickListener(view -> {
-            if (!v2ray_config.isEmpty()) {
-                sharedPreferences.edit().remove("v2ray_config").apply();
-                V2rayController.stopV2ray(this);
-                resetTheConfiguration();
-            }
+        btnPopup2.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(HomeActivity.this, v);
+            popup.setOnMenuItemClickListener(HomeActivity.this);
+            popup.inflate(R.menu.popup_menu);
+            popup.show();
         });
 
-        tg.setOnClickListener(v -> openTelegramBot());
 
         connect.setOnClickListener(view -> {
             if (V2rayController.getConnectionState() == V2rayConstants.CONNECTION_STATES.DISCONNECTED) {
@@ -102,6 +78,7 @@ public class MainActivity extends AppCompatActivity{
                 V2rayController.stopV2ray(this);
             }
         });
+
 
         connected_server_delay.setOnClickListener(view -> {
             connected_server_delay.setText("connected server delay : measuring...");
@@ -160,25 +137,11 @@ public class MainActivity extends AppCompatActivity{
 
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-
-        MenuInflater menuInflater = new MenuInflater( this);
-        menuInflater.inflate(R.menu.menu_item, menu);
-
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        int id = item.getItemId();
-
-        if(id == R.id.reser){
-            Intent intent = new Intent(MainActivity.this, activity1.class);
-            startActivity(intent);
+    public boolean onMenuItemClick(MenuItem item) {
+        if(item.getItemId() == R.id.reset){
+            resetTheConfiguration();
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     public void openTelegramBot(){
@@ -189,9 +152,21 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void resetTheConfiguration(){
-        Intent intent = new Intent(MainActivity.this, activity1.class);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+        String v2ray_config = sharedPreferences.getString("v2ray_config", "");
+
+        if (!v2ray_config.isEmpty()) {
+
+            sharedPreferences.edit().remove("v2ray_config").apply();
+            V2rayController.stopV2ray(this);
+
+        }
+
+        Intent intent = new Intent(HomeActivity.this, ResetConfigActivity.class);
         startActivity(intent);
         finish();
+
     }
 
     @Override

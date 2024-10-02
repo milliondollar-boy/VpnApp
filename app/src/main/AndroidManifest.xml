@@ -18,12 +18,12 @@
             android:name=".activity_settings"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi" />
         <activity
-            android:name=".activity1"
+            android:name=".ResetConfigActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="DiscouragedApi">
