@@ -1,11 +1,6 @@
 package dev.dev7.example;
 
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_CONNECTION_STATE_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_DOWNLOAD_SPEED_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_DOWNLOAD_TRAFFIC_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_DURATION_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_UPLOAD_SPEED_BROADCAST_EXTRA;
-import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_UPLOAD_TRAFFIC_BROADCAST_EXTRA;
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_STATICS_BROADCAST_INTENT;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
@@ -15,25 +10,21 @@ import android.net.Uri;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
-import android.widget.TextView;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import java.util.Objects;
 import dev.dev7.lib.v2ray.V2rayController;
-import dev.dev7.lib.v2ray.utils.V2rayConfigs;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
 public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
     private ImageButton connect, btnPopup2;
     private Button connection;
-    private TextView connection_speed, connection_traffic, connection_time, server_delay, connected_server_delay, connection_mode;
     private BroadcastReceiver v2rayBroadCastReceiver;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
@@ -54,12 +45,6 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             connect = findViewById(R.id.imageButton4);
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
-            connection_speed = findViewById(R.id.connection_speed);
-            connection_time = findViewById(R.id.connection_duration);
-            connection_traffic = findViewById(R.id.connection_traffic);
-            server_delay = findViewById(R.id.server_delay);
-            connection_mode = findViewById(R.id.connection_mode);
-            connected_server_delay = findViewById(R.id.connected_server_delay);
             connection = findViewById(R.id.button15);
         }
 
@@ -79,34 +64,13 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             }
         });
 
-
-        connected_server_delay.setOnClickListener(view -> {
-            connected_server_delay.setText("connected server delay : measuring...");
-            // Don`t forget to do ui jobs in ui thread!
-            V2rayController.getConnectedV2rayServerDelay(this, delayResult -> runOnUiThread(() -> connected_server_delay.setText("connected server delay : " + delayResult + "ms")));
-        });
-
-        // Another way to check the connection delay of a config without connecting to it.
-        server_delay.setOnClickListener(view -> {
-            server_delay.setText("server delay : measuring...");
-            new Handler().postDelayed(() -> server_delay.setText("server delay : " + V2rayController.getV2rayServerDelay(v2ray_config) + "ms"), 200);
-        });
-
-        connection_mode.setOnClickListener(view -> {
-            V2rayController.toggleConnectionMode();
-            connection_mode.setText("connection mode : " + V2rayConfigs.serviceMode.toString());
-        });
-
         v2rayBroadCastReceiver = new BroadcastReceiver() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onReceive(Context context, Intent intent) {
                 runOnUiThread(() -> {
-                    connection_time.setText("connection time : " + Objects.requireNonNull(intent.getExtras()).getString(SERVICE_DURATION_BROADCAST_EXTRA));
-                    connection_speed.setText("connection speed : " + intent.getExtras().getString(SERVICE_UPLOAD_SPEED_BROADCAST_EXTRA) + " | " + intent.getExtras().getString(SERVICE_DOWNLOAD_SPEED_BROADCAST_EXTRA));
-                    connection_traffic.setText("connection traffic : " + intent.getExtras().getString(SERVICE_UPLOAD_TRAFFIC_BROADCAST_EXTRA) + " | " + intent.getExtras().getString(SERVICE_DOWNLOAD_TRAFFIC_BROADCAST_EXTRA));
-                    connection_mode.setText("connection mode : " + V2rayConfigs.serviceMode.toString());
-                    switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(intent.getExtras().getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
+
+                    switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
                         case CONNECTED:
                             connect.setImageResource(R.drawable.disconnection);
                             connection.setText("Подключено");
@@ -114,7 +78,6 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                         case DISCONNECTED:
                             connect.setImageResource(R.drawable.connection);
                             connection.setText("Отключено");
-                            connected_server_delay.setText("connected server delay : wait for connection");
                             break;
                         case CONNECTING:
                             connection.setText("CONNECTING");
@@ -138,8 +101,12 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.reset){
+        int id = item.getItemId();
+        if(id == R.id.reset){
             resetTheConfiguration();
+        }
+        if(id == R.id.tg){
+            openTelegramBot();
         }
         return true;
     }

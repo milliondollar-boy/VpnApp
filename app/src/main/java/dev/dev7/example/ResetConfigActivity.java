@@ -9,10 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 
-public class ResetConfigActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener
+public class ResetConfigActivity extends HomeActivity
 {
     private ImageButton btnPopup1;
     private Button connection;
@@ -62,8 +61,8 @@ public class ResetConfigActivity extends AppCompatActivity implements PopupMenu.
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.reset){
-
+        if(item.getItemId() == R.id.tg){
+            openTelegramBot();
         }
         return true;
     }
