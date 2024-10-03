@@ -13,7 +13,7 @@ import androidx.appcompat.widget.PopupMenu;
 
 public class ResetConfigActivity extends HomeActivity
 {
-    private ImageButton btnPopup1;
+    private ImageButton btnPopup1, tgBot1;
     private Button connection;
     private EditText v2ray_config;
     private SharedPreferences sharedPreferences;
@@ -26,12 +26,14 @@ public class ResetConfigActivity extends HomeActivity
         setContentView(R.layout.reset_activity);
 
         if (savedInstanceState == null) {
+            tgBot1 = findViewById(R.id.tgBot1);
             btnPopup1 = findViewById(R.id.imageButton);
             connection = findViewById(R.id.btn_connection);
             v2ray_config = findViewById(R.id.v2ray_config);
         }
 
 
+        tgBot1.setOnClickListener(v -> openTelegramBot());
         btnPopup1.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(ResetConfigActivity.this, v);
             popup.setOnMenuItemClickListener(ResetConfigActivity.this);
@@ -61,9 +63,6 @@ public class ResetConfigActivity extends HomeActivity
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if(item.getItemId() == R.id.tg){
-            openTelegramBot();
-        }
         return true;
     }
 

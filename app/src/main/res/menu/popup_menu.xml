@@ -3,15 +3,16 @@
 
     <item
         android:id="@+id/reset"
-        android:title="reset"/>
-    <item
-        android:id="@+id/tg"
-        android:title="tg"/>
+        android:title="Сбросить конфигурацию"
+        android:icon="@drawable/settings"/>
     <item
         android:id="@+id/faq"
-        android:title="FAQ"/>
+        android:title="Поддержка"/>
     <item
         android:id="@+id/share"
         android:title="Поделиться"/>
+    <item
+        android:id="@+id/about"
+        android:title="О приложении"/>
 
 </menu>

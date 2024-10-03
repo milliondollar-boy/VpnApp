@@ -11,19 +11,21 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
+
 import java.util.Objects;
 import dev.dev7.lib.v2ray.V2rayController;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
 public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
 
-    private ImageButton connect, btnPopup2;
+    private ImageButton connect, tgBot2;
     private Button connection;
     private BroadcastReceiver v2rayBroadCastReceiver;
 
@@ -40,20 +42,15 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
 
         if (savedInstanceState == null)
         {
-
-            btnPopup2 = findViewById(R.id.setting_id);
+            tgBot2 = findViewById(R.id.tgBot2);
             connect = findViewById(R.id.imageButton4);
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             connection = findViewById(R.id.button15);
         }
 
-        btnPopup2.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(HomeActivity.this, v);
-            popup.setOnMenuItemClickListener(HomeActivity.this);
-            popup.inflate(R.menu.popup_menu);
-            popup.show();
-        });
+
+        tgBot2.setOnClickListener(v -> openTelegramBot());
 
 
         connect.setOnClickListener(view -> {
@@ -98,6 +95,13 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
+    public void showPopupMenu(View view){
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.popup_menu);
+        popupMenu.show();
+    }
+
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -105,14 +109,11 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         if(id == R.id.reset){
             resetTheConfiguration();
         }
-        if(id == R.id.tg){
-            openTelegramBot();
-        }
         return true;
     }
 
     public void openTelegramBot(){
-        String botUsername = "My First Bot"; // Замените на имя вашего бота
+        String botUsername = "SUPERhit_vpn_bot"; // Замените на имя вашего бота
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("https://t.me/crackeppp_bot" + botUsername));
         startActivity(intent);

@@ -5,50 +5,56 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="10dp"
     android:orientation="vertical"
-    tools:context=".HomeActivity">
+    tools:context=".ResetConfigActivity">
 
 
     <EditText
         android:id="@+id/v2ray_config"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="445dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="38dp"
+        android:layout_width="404dp"
+        android:layout_height="160dp"
         android:layout_weight="1"
         android:background="@android:drawable/dialog_holo_dark_frame"
         android:gravity="top"
-        android:hint="vless//xxxxxxxx/xxxxx"
+        android:hint="v2ray config goes here"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_connection"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.636"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.844" />
+
+    <ImageButton
+        android:id="@+id/tgBot1"
+        android:layout_width="63dp"
+        android:layout_height="49dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/baseline_flight_24" />
 
     <Button
         android:id="@+id/btn_connection"
-        android:layout_width="249dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="63dp"
+        android:layout_width="307dp"
+        android:layout_height="47dp"
         android:text="СОХРАНИТЬ КОНФИГУРАЦИЮ"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.255"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v2ray_config" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.937" />
 
     <ImageButton
         android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="386dp"
-        app:layout_constraintBottom_toTopOf="@+id/v2ray_config"
+        android:layout_width="67dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/settings" />

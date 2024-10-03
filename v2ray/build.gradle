@@ -29,6 +29,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation(group: "", name: "libv2ray", version: "", ext: "aar")
 }
