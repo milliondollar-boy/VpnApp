@@ -25,39 +25,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.844" />
 
-    <ImageButton
-        android:id="@+id/tgBot1"
-        android:layout_width="63dp"
-        android:layout_height="49dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="60dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/baseline_flight_24" />
 
     <Button
         android:id="@+id/btn_connection"
         android:layout_width="307dp"
         android:layout_height="47dp"
+        android:background="#0000FF"
         android:text="СОХРАНИТЬ КОНФИГУРАЦИЮ"
+        android:textColor="@android:color/black"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.255"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.937" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="67dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/settings" />
+        app:layout_constraintVertical_bias="0.932" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

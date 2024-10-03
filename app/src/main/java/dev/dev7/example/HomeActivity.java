@@ -2,7 +2,7 @@ package dev.dev7.example;
 
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.SERVICE_CONNECTION_STATE_BROADCAST_EXTRA;
 import static dev.dev7.lib.v2ray.utils.V2rayConstants.V2RAY_SERVICE_STATICS_BROADCAST_INTENT;
-import android.annotation.SuppressLint;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.IntentFilter;
@@ -10,27 +10,31 @@ import android.net.Uri;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.PopupMenu;
-
 import java.util.Objects;
 import dev.dev7.lib.v2ray.V2rayController;
 import dev.dev7.lib.v2ray.utils.V2rayConstants;
 
-public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener {
+import android.annotation.SuppressLint;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
-    private ImageButton connect, tgBot2;
+
+
+public class HomeActivity extends AppCompatActivity
+{
+
+    private ImageButton connect;
     private Button connection;
     private BroadcastReceiver v2rayBroadCastReceiver;
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    @SuppressLint({"SetTextI18n", "WrongViewCast"})
+    @SuppressLint({"SetTextI18n", "WrongViewCast", "UseCompatLoadingForDrawables"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -40,18 +44,16 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
 
+        Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getResources().getDrawable(R.color.gray));
+
+
         if (savedInstanceState == null)
         {
-            tgBot2 = findViewById(R.id.tgBot2);
             connect = findViewById(R.id.imageButton4);
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             V2rayController.init(this, R.drawable.ic_launcher, "V2ray Android");
             connection = findViewById(R.id.button15);
         }
-
-
-        tgBot2.setOnClickListener(v -> openTelegramBot());
-
 
         connect.setOnClickListener(view -> {
             if (V2rayController.getConnectionState() == V2rayConstants.CONNECTION_STATES.DISCONNECTED) {
@@ -64,8 +66,7 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         v2rayBroadCastReceiver = new BroadcastReceiver() {
             @SuppressLint("SetTextI18n")
             @Override
-            public void onReceive(Context context, Intent intent) {
-                runOnUiThread(() -> {
+            public void onReceive(Context context, Intent intent) {runOnUiThread(() -> {
 
                     switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
                         case CONNECTED:
@@ -81,6 +82,7 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                             break;
                         default:
                             break;
+
                     }
                 });
             }
@@ -95,28 +97,31 @@ public class HomeActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
-    public void showPopupMenu(View view){
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.setOnMenuItemClickListener(this);
-        popupMenu.inflate(R.menu.popup_menu);
-        popupMenu.show();
-    }
-
-
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.reset){
-            resetTheConfiguration();
-        }
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.popup_menu, menu);
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        if(id == R.id.reset){
+            resetTheConfiguration();
+        }
+        if(id == R.id.tgBot){
+            openTelegramBot();
+        }
+
+        return super.onOptionsItemSelected(item);
+
+    }
+
     public void openTelegramBot(){
-        String botUsername = "SUPERhit_vpn_bot"; // Замените на имя вашего бота
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse("https://t.me/crackeppp_bot" + botUsername));
-        startActivity(intent);
+        Intent telegram = new Intent(Intent.ACTION_VIEW , Uri.parse("https://t.me/SUPERhit_vpn_bot"));
+        startActivity(telegram);
     }
 
     public void resetTheConfiguration(){

@@ -4,16 +4,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
-import androidx.appcompat.widget.PopupMenu;
 
 public class ResetConfigActivity extends HomeActivity
 {
-    private ImageButton btnPopup1, tgBot1;
     private Button connection;
     private EditText v2ray_config;
     private SharedPreferences sharedPreferences;
@@ -26,21 +22,9 @@ public class ResetConfigActivity extends HomeActivity
         setContentView(R.layout.reset_activity);
 
         if (savedInstanceState == null) {
-            tgBot1 = findViewById(R.id.tgBot1);
-            btnPopup1 = findViewById(R.id.imageButton);
             connection = findViewById(R.id.btn_connection);
             v2ray_config = findViewById(R.id.v2ray_config);
         }
-
-
-        tgBot1.setOnClickListener(v -> openTelegramBot());
-        btnPopup1.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(ResetConfigActivity.this, v);
-            popup.setOnMenuItemClickListener(ResetConfigActivity.this);
-            popup.inflate(R.menu.popup_menu);
-            popup.show();
-        });
-
 
         // initialize shared preferences for save or reload default config
         sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
@@ -59,11 +43,6 @@ public class ResetConfigActivity extends HomeActivity
                 startSecondActivity();
             }
         });
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem item) {
-        return true;
     }
 
     @Override
