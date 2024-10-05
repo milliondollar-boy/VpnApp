@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation(group: "", name: "libv2ray", version: "", ext: "aar")
 }

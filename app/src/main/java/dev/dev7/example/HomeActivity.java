@@ -33,6 +33,7 @@ public class HomeActivity extends AppCompatActivity
     private ImageButton connect;
     private Button connection;
     private BroadcastReceiver v2rayBroadCastReceiver;
+    private String tgLink = "https://t.me/SUPERhit_vpn_bot";
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @SuppressLint({"SetTextI18n", "WrongViewCast", "UseCompatLoadingForDrawables"})
@@ -116,6 +117,10 @@ public class HomeActivity extends AppCompatActivity
         if(id == R.id.tgBot){
             openTelegramBot();
         }
+        if(id == R.id.share){
+            shareApp();
+        }
+
         if(id == R.id.about){
             aboutUs();
         }
@@ -124,13 +129,22 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    public void shareApp(){
+        String botLink = tgLink; // Ссылка на вашего Telegram-бота
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "Привет! Попробуй этот VPN: " + botLink);
+        shareIntent.setType("text/plain");
+        startActivity(Intent.createChooser(shareIntent, "Поделиться ботом через"));
+    }
+
     public void aboutUs(){
         Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
         startActivity(intent);
     }
 
     public void openTelegramBot(){
-        Intent telegram = new Intent(Intent.ACTION_VIEW , Uri.parse("https://t.me/SUPERhit_vpn_bot"));
+        Intent telegram = new Intent(Intent.ACTION_VIEW , Uri.parse(tgLink));
         startActivity(telegram);
     }
 
