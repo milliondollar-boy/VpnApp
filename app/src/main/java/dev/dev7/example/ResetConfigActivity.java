@@ -4,13 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Button;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.EditText;
-import android.widget.Toast;
+
 
 public class ResetConfigActivity extends HomeActivity
 {
-    private Button connection;
     private EditText v2ray_config;
     private SharedPreferences sharedPreferences;
 
@@ -22,7 +22,6 @@ public class ResetConfigActivity extends HomeActivity
         setContentView(R.layout.reset_activity);
 
         if (savedInstanceState == null) {
-            connection = findViewById(R.id.btn_connection);
             v2ray_config = findViewById(R.id.v2ray_config);
         }
 
@@ -31,18 +30,36 @@ public class ResetConfigActivity extends HomeActivity
         // reload previous config to edit text
         v2ray_config.setText(sharedPreferences.getString("v2ray_config", getDefaultConfig()));
 
-        connection.setOnClickListener(view ->
-        {
-            String v2rayConfig = v2ray_config.getText().toString().trim(); // Получаем текст из EditText
-            if (v2rayConfig.isEmpty()) { // Проверяем, пустое ли поле
-                // Можно показать сообщение об ошибке, если поле пустое
-                Toast.makeText(ResetConfigActivity.this, "Введите ссылку!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Сохраняем конфигурацию и открываем вторую активность
-                sharedPreferences.edit().putString("v2ray_config", v2rayConfig).apply();
-                startSecondActivity();
+
+
+
+        // Добавляем слушатель для отслеживания изменений текста
+        v2ray_config.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Не нужно ничего делать
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String input = s.toString().trim();
+
+
+                // Проверяем, если введенное значение соответствует шаблону ссылки
+                if (input.startsWith("vless://")) {
+                    // Сохраняем конфигурацию и открываем вторую активность
+                    sharedPreferences.edit().putString("v2ray_config", input).apply();
+                    startHomeActivity();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Не нужно ничего делать
             }
         });
+
+
     }
 
     @Override
@@ -52,11 +69,11 @@ public class ResetConfigActivity extends HomeActivity
         String v2rayConfig = sharedPreferences.getString("v2ray_config", null);
         if (v2rayConfig != null) {
             // Если конфигурация существует, открываем вторую активность
-            startSecondActivity();
+            startHomeActivity();
         }
     }
 
-    public void startSecondActivity(){
+    public void startHomeActivity(){
         Intent intent = new Intent(ResetConfigActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();

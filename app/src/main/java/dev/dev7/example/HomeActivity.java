@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.content.SharedPreferences;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Objects;
 import dev.dev7.lib.v2ray.V2rayController;
@@ -23,7 +25,6 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
-
 
 
 public class HomeActivity extends AppCompatActivity
@@ -47,6 +48,7 @@ public class HomeActivity extends AppCompatActivity
         Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getResources().getDrawable(R.color.gray));
 
 
+
         if (savedInstanceState == null)
         {
             connect = findViewById(R.id.imageButton4);
@@ -68,23 +70,23 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onReceive(Context context, Intent intent) {runOnUiThread(() -> {
 
-                    switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
-                        case CONNECTED:
-                            connect.setImageResource(R.drawable.disconnection);
-                            connection.setText("Подключено");
-                            break;
-                        case DISCONNECTED:
-                            connect.setImageResource(R.drawable.connection);
-                            connection.setText("Отключено");
-                            break;
-                        case CONNECTING:
-                            connection.setText("CONNECTING");
-                            break;
-                        default:
-                            break;
+                switch ((V2rayConstants.CONNECTION_STATES) Objects.requireNonNull(Objects.requireNonNull(intent.getExtras()).getSerializable(SERVICE_CONNECTION_STATE_BROADCAST_EXTRA))) {
+                    case CONNECTED:
+                        connect.setImageResource(R.drawable.disconnection);
+                        connection.setText("Подключено");
+                        break;
+                    case DISCONNECTED:
+                        connect.setImageResource(R.drawable.connection);
+                        connection.setText("Отключено");
+                        break;
+                    case CONNECTING:
+                        connection.setText("CONNECTING");
+                        break;
+                    default:
+                        break;
 
-                    }
-                });
+                }
+            });
             }
         };
 
@@ -114,9 +116,17 @@ public class HomeActivity extends AppCompatActivity
         if(id == R.id.tgBot){
             openTelegramBot();
         }
+        if(id == R.id.about){
+            aboutUs();
+        }
 
         return super.onOptionsItemSelected(item);
 
+    }
+
+    public void aboutUs(){
+        Intent intent = new Intent(HomeActivity.this, AboutActivity.class);
+        startActivity(intent);
     }
 
     public void openTelegramBot(){
@@ -124,23 +134,35 @@ public class HomeActivity extends AppCompatActivity
         startActivity(telegram);
     }
 
-    public void resetTheConfiguration(){
+    public void resetTheConfiguration() {
+        // Создаем диалог для подтверждения сброса конфигурации
+        new AlertDialog.Builder(HomeActivity.this)
+                .setTitle("Сброс конфигурации")
+                .setMessage("Вы уверены, что хотите сбросить конфигурацию?")
+                .setPositiveButton("Подтвердить", (dialog, which) -> {
+                    // Действие при подтверждении сброса
+                    SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+                    String v2ray_config = sharedPreferences.getString("v2ray_config", "");
 
-        SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
-        String v2ray_config = sharedPreferences.getString("v2ray_config", "");
+                    if (!v2ray_config.isEmpty()) {
+                        // Удаляем сохраненную конфигурацию
+                        sharedPreferences.edit().remove("v2ray_config").apply();
+                        // Останавливаем V2ray
+                        V2rayController.stopV2ray(this);
+                    }
 
-        if (!v2ray_config.isEmpty()) {
-
-            sharedPreferences.edit().remove("v2ray_config").apply();
-            V2rayController.stopV2ray(this);
-
-        }
-
-        Intent intent = new Intent(HomeActivity.this, ResetConfigActivity.class);
-        startActivity(intent);
-        finish();
-
+                    // Запускаем активность ResetConfigActivity
+                    Intent intent = new Intent(HomeActivity.this, ResetConfigActivity.class);
+                    startActivity(intent);
+                    finish();
+                })
+                .setNegativeButton("Отменить", (dialog, which) -> {
+                    // Действие при отмене (просто закрываем диалог)
+                    dialog.dismiss();
+                })
+                .show();
     }
+
 
     @Override
     protected void onDestroy() {
