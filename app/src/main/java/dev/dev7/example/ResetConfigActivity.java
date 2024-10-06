@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.EditText;
 
+import androidx.appcompat.widget.Toolbar;
+
 
 public class ResetConfigActivity extends HomeActivity
 {
@@ -20,6 +22,9 @@ public class ResetConfigActivity extends HomeActivity
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reset_activity);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
             v2ray_config = findViewById(R.id.v2ray_config);

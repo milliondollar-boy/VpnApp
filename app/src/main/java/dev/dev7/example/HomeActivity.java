@@ -25,6 +25,7 @@ import dev.dev7.lib.v2ray.utils.V2rayConstants;
 import android.annotation.SuppressLint;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.Toolbar;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -46,7 +47,11 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Objects.requireNonNull(getSupportActionBar()).setBackgroundDrawable(getResources().getDrawable(R.color.gray));
+
 
 
 

@@ -1,39 +1,45 @@
 package dev.dev7.example;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.Window;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 public class AboutActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_about);
-        Window window = getWindow();
-        window.setStatusBarColor(Color.parseColor("#302F2F")); // Серый цвет
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true); // Показать кнопку "Назад"
-            actionBar.setTitle("О нас"); // Установите название активности
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#302F2F")));
+        setContentView(R.layout.activity_about); // Замените на ваш реальный файл макета
+
+        // Инициализируем Toolbar
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            // Включаем кнопку "Назад"
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            // Устанавливаем заголовок, если нужно
+            getSupportActionBar().setTitle("О нас");
+        } else {
+            // Логирование или обработка ситуации, когда Toolbar не установлен
+            // Например:
+            // Log.e("AboutUsActivity", "Toolbar не установлен как ActionBar");
         }
 
+        // Остальная инициализация активности
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        if(id == android.R.id.home){
-            finish();
+        // Обработка нажатия на кнопку "Назад" в Toolbar
+        if (item.getItemId() == android.R.id.home) {
+            // Завершение текущей активности и возврат к предыдущей
+            finish(); // Или используйте onBackPressed();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -8,6 +8,18 @@
     android:orientation="vertical"
     tools:context=".ResetConfigActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:logo="@drawable/baseline_photo_size_select_actual_24"
+        app:title="WhatsApp"
+        app:titleMarginStart="30dp"
+        tools:layout_editor_absoluteX="-3dp"
+        tools:ignore="MissingConstraints" />
+
 
     <EditText
         android:id="@+id/v2ray_config"

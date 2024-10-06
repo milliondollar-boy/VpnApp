@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/gray"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:logo="@drawable/baseline_photo_size_select_actual_24"
+            app:title="WhatsApp"
+            app:titleMarginStart="30dp"
+            tools:layout_editor_absoluteX="-3dp"
+            tools:ignore="MissingConstraints" />
+
         <Button
             android:id="@+id/button15"
             android:layout_width="161dp"
