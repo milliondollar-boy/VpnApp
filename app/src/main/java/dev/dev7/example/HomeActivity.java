@@ -108,8 +108,43 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.popup_menu, menu);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("conf", MODE_PRIVATE);
+        String v2rayConfig = sharedPreferences.getString("v2ray_config", "");
+
+        // Парсим конфигурацию, чтобы получить ID из ссылки (после _)
+        String userId = parseUserIdFromConfig(v2rayConfig);
+
+        // Находим пункт меню и устанавливаем текст ID
+        MenuItem userIdMenuItem = menu.findItem(R.id.id);
+        if (userIdMenuItem != null && userId != null) {
+            userIdMenuItem.setTitle("ID: " + userId);
+        }
+
         return true;
     }
+
+    private String parseUserIdFromConfig(String config) {
+        if (config == null || config.isEmpty()) {
+            return "";
+        }
+
+        // Находим индекс символа #
+        int hashIndex = config.lastIndexOf('#');
+        if (hashIndex != -1 && hashIndex + 1 < config.length()) {
+            // Извлекаем строку после #
+            String userIdSection = config.substring(hashIndex + 1);
+            // Находим индекс символа _
+            int underscoreIndex = userIdSection.lastIndexOf('_');
+            if (underscoreIndex != -1 && underscoreIndex + 1 < userIdSection.length()) {
+                // Возвращаем часть строки после _
+                return userIdSection.substring(underscoreIndex + 1);
+            }
+        }
+
+        return ""; // Если ID не найден, возвращаем пустую строку
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

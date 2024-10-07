@@ -24,10 +24,6 @@ public class AboutActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             // Устанавливаем заголовок, если нужно
             getSupportActionBar().setTitle("О нас");
-        } else {
-            // Логирование или обработка ситуации, когда Toolbar не установлен
-            // Например:
-            // Log.e("AboutUsActivity", "Toolbar не установлен как ActionBar");
         }
 
         // Остальная инициализация активности
@@ -39,7 +35,6 @@ public class AboutActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             // Завершение текущей активности и возврат к предыдущей
             finish(); // Или используйте onBackPressed();
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }
